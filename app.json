@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Dialer",
+    "slug": "dialer-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "dialer",
+    "newArchEnabled": false,
+    "android": {
+      "package": "com.bol7.dialer",
+      "adaptiveIcon": {
+        "backgroundColor": "#3538CD"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "INTERNET",
+        "POST_NOTIFICATIONS",
+        "VIBRATE"
+      ]
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.bol7.dialer"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-notifications",
+      "@react-native-community/datetimepicker"
+    ],
+    "extra": {
+      "API_BASE_URL": "http://192.168.1.121:8000"
+    }
+  }
+}
