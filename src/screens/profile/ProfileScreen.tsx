@@ -132,7 +132,7 @@ export function ProfileScreen() {
             <View className="h-full bg-emerald-500 rounded-full" style={{ width: `${connectRate}%` }} />
           </View>
           <View className="flex-row">
-            <SnapshotCell color="#0EA5E9" bg="bg-sky-50" icon="time-outline" value={stats?.callbacks_due ?? 0} label="Callbacks" />
+            <SnapshotCell color="#0EA5E9" bg="bg-sky-50" icon="time-outline" value={stats?.callbacks_due ?? 0} label="Follow-ups" />
             <SnapshotCell color="#EF4444" bg="bg-rose-50" icon="close-circle-outline" value={stats?.missed_calls ?? 0} label="Missed" />
             <SnapshotCell color="#8B5CF6" bg="bg-violet-50" icon="trophy-outline" value={stats?.conversions ?? 0} label="Wins" />
           </View>

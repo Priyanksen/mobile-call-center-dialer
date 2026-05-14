@@ -23,7 +23,7 @@ const DISPO_META: Record<
 > = {
   interested: { label: 'Interested', color: '#10B981', bg: 'bg-emerald-50', icon: 'thumbs-up-outline' },
   not_interested: { label: 'Not interested', color: '#EF4444', bg: 'bg-rose-50', icon: 'thumbs-down-outline' },
-  callback: { label: 'Callback', color: '#F59E0B', bg: 'bg-amber-50', icon: 'alarm-outline' },
+  callback: { label: 'Follow-up', color: '#F59E0B', bg: 'bg-amber-50', icon: 'alarm-outline' },
   no_answer: { label: 'No answer', color: '#64748B', bg: 'bg-ink-100', icon: 'call-outline' },
   busy: { label: 'Busy', color: '#0EA5E9', bg: 'bg-sky-50', icon: 'time-outline' },
   wrong_number: { label: 'Wrong number', color: '#F43F5E', bg: 'bg-rose-50', icon: 'alert-circle-outline' },

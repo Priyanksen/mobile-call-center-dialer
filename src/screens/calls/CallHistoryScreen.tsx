@@ -42,6 +42,7 @@ const directionIcon = (s: CallStatus): { name: keyof typeof Ionicons.glyphMap; c
 
 export function CallHistoryScreen() {
   const [range, setRange] = useState<Range>('today');
+  const [recOnly, setRecOnly] = useState(false);
   const [data, setData] = useState<Call[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -71,7 +72,12 @@ export function CallHistoryScreen() {
 
   return (
     <View className="flex-1 bg-bg dark:bg-ink-900">
-      <GradientHeader title="Call History" subtitle={`${data.length} ${data.length === 1 ? 'call' : 'calls'}`} />
+      <GradientHeader
+        title="Call History"
+        subtitle={`${recOnly ? data.filter((c) => c.recording_url).length : data.length} ${
+          (recOnly ? data.filter((c) => c.recording_url).length : data.length) === 1 ? 'call' : 'calls'
+        }`}
+      />
       <View className="px-4 pt-3 pb-3 bg-white dark:bg-ink-800 border-b border-ink-100 dark:border-ink-700">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {RANGES.map((r) => (
@@ -82,6 +88,11 @@ export function CallHistoryScreen() {
               onPress={() => setRange(r.value)}
             />
           ))}
+          <FilterChip
+            label="🎙  Has recording"
+            active={recOnly}
+            onPress={() => setRecOnly((v) => !v)}
+          />
         </ScrollView>
       </View>
       {loading ? (
@@ -90,7 +101,7 @@ export function CallHistoryScreen() {
         <ErrorState message={error} onRetry={load} />
       ) : (
         <FlatList
-          data={data}
+          data={recOnly ? data.filter((c) => c.recording_url) : data}
           keyExtractor={(c) => c.call_id}
           contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#444CE7" />}
@@ -137,10 +148,10 @@ export function CallHistoryScreen() {
                 {item.recording_url ? (
                   <Pressable
                     onPress={() => item.recording_url && Linking.openURL(item.recording_url)}
-                    className="flex-row items-center mt-2"
+                    className="flex-row items-center mt-3 self-start px-3 py-1.5 rounded-full bg-brand-50 active:opacity-80"
                   >
                     <Ionicons name="play-circle" size={16} color="#444CE7" />
-                    <Text className="text-brand-700 text-sm ml-1 font-semibold">Play recording</Text>
+                    <Text className="text-brand-700 text-xs ml-1.5 font-bold">Play recording</Text>
                   </Pressable>
                 ) : null}
               </View>

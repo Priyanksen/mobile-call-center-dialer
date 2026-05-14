@@ -12,6 +12,7 @@ import { BottomSheet } from '@/components/common/BottomSheet';
 import { GradientHeader } from '@/components/common/GradientHeader';
 import { StatusBadge, leadStatusTone, priorityTone, callStatusTone } from '@/components/common/StatusBadge';
 import { RoutePickerSheet } from '@/components/calls/RoutePickerSheet';
+import { ContactActionsRow } from '@/components/leads/ContactActionsRow';
 import { Lead } from '@/types/lead';
 import { Call, CallRouteType } from '@/types/call';
 import { leadsApi } from '@/api/leadsApi';
@@ -141,6 +142,8 @@ export function LeadDetailScreen() {
             </View>
           </View>
         </View>
+
+        <ContactActionsRow lead={lead} />
 
         <View className="bg-white dark:bg-ink-800 rounded-2xl p-4 mb-3 border border-ink-200 dark:border-ink-700" style={{ elevation: 1 }}>
           <Row icon="megaphone-outline" label="Campaign" value={lead.campaign_name ?? '—'} />

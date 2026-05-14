@@ -15,7 +15,7 @@ const STATUS_OPTIONS: DropdownOption<LeadStatus | 'all'>[] = [
   { label: 'New', value: 'new' },
   { label: 'Contacted', value: 'contacted' },
   { label: 'Interested', value: 'interested' },
-  { label: 'Callback', value: 'callback' },
+  { label: 'Follow-up', value: 'callback' },
   { label: 'Not interested', value: 'not_interested' },
   { label: 'Converted', value: 'converted' },
   { label: 'Closed', value: 'closed' },
@@ -24,7 +24,7 @@ const STATUS_OPTIONS: DropdownOption<LeadStatus | 'all'>[] = [
 const ORDERING_OPTIONS: DropdownOption<NonNullable<Filters['ordering']>>[] = [
   { label: 'Priority', value: 'priority' },
   { label: 'Latest first', value: '-created_at' },
-  { label: 'Callback time', value: 'next_callback_at' },
+  { label: 'Follow-up time', value: 'next_callback_at' },
 ];
 
 export function LeadFilters({ value, onChange }: Props) {

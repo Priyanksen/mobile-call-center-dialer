@@ -85,7 +85,7 @@ export function CallbackListScreen() {
   return (
     <View className="flex-1 bg-bg dark:bg-ink-900">
       <GradientHeader
-        title="Callbacks"
+        title="Follow-ups"
         subtitle={`${sorted.length} scheduled${overdueCount ? ` • ${overdueCount} overdue` : ''}`}
         right={
           overdueCount ? (
@@ -108,7 +108,7 @@ export function CallbackListScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#444CE7" />}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <EmptyState title="No callbacks" message="Scheduled callbacks will appear here." icon="alarm-outline" />
+            <EmptyState title="No follow-ups" message="Scheduled follow-ups will appear here." icon="alarm-outline" />
           }
           renderItem={({ item }) => {
             const overdue = new Date(item.scheduled_at).getTime() < Date.now() && item.status === 'pending';

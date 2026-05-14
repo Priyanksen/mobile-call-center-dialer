@@ -18,4 +18,5 @@ export interface AgentStats {
   missed_calls: number;
   callbacks_due: number;
   conversions: number;
+  new_leads?: number;
 }

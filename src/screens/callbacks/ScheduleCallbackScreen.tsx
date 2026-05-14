@@ -63,7 +63,7 @@ export function ScheduleCallbackScreen() {
         scheduled_at: when.toISOString(),
         notes: notes.trim() || undefined,
       });
-      Alert.alert('Scheduled', 'Callback was saved.', [
+      Alert.alert('Scheduled', 'Follow-up was saved.', [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     } catch (e) {
@@ -77,7 +77,7 @@ export function ScheduleCallbackScreen() {
 
   return (
     <View className="flex-1 bg-bg dark:bg-ink-900">
-      <GradientHeader title="Schedule Callback" subtitle={lead.name} />
+      <GradientHeader title="Schedule Follow-up" subtitle={lead.name} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -141,7 +141,7 @@ export function ScheduleCallbackScreen() {
         </View>
 
         <AppButton
-          label="Save Callback"
+          label="Save Follow-up"
           onPress={submit}
           loading={submitting}
           fullWidth

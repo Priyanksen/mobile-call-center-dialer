@@ -15,8 +15,8 @@ const FAQS = [
     a: 'The app polls /api/calls/{id}/status/ every 2 seconds. If your backend or Asterisk is unreachable the status will not advance. Check that the backend is running and that your phone can reach it at the API URL set in Settings.',
   },
   {
-    q: 'How do callback reminders work?',
-    a: 'Reminders are local notifications scheduled with expo-notifications. The first time you open the Callbacks tab you will be asked for notification permission. After that, every pending callback fires a notification at its scheduled time.',
+    q: 'How do follow-up reminders work?',
+    a: 'Reminders are local notifications scheduled with expo-notifications. The first time you open the Follow-ups tab you will be asked for notification permission. After that, every pending follow-up fires a notification at its scheduled time.',
   },
   {
     q: 'Why does my status say it failed to update?',

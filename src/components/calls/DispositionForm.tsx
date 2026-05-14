@@ -24,7 +24,7 @@ interface OptDef {
 const OPTIONS: OptDef[] = [
   { value: 'interested', label: 'Interested', icon: 'thumbs-up-outline', bg: 'bg-emerald-50', ring: 'border-emerald-500', color: '#10B981' },
   { value: 'not_interested', label: 'Not interested', icon: 'thumbs-down-outline', bg: 'bg-rose-50', ring: 'border-rose-500', color: '#EF4444' },
-  { value: 'callback', label: 'Callback', icon: 'alarm-outline', bg: 'bg-amber-50', ring: 'border-amber-500', color: '#F59E0B' },
+  { value: 'callback', label: 'Follow-up', icon: 'alarm-outline', bg: 'bg-amber-50', ring: 'border-amber-500', color: '#F59E0B' },
   { value: 'no_answer', label: 'No answer', icon: 'call-outline', bg: 'bg-ink-100 dark:bg-ink-700', ring: 'border-ink-500', color: '#64748B' },
   { value: 'busy', label: 'Busy', icon: 'time-outline', bg: 'bg-sky-50', ring: 'border-sky-500', color: '#0EA5E9' },
   { value: 'wrong_number', label: 'Wrong number', icon: 'alert-circle-outline', bg: 'bg-rose-50', ring: 'border-rose-500', color: '#EF4444' },
@@ -41,7 +41,7 @@ export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props)
   const submit = () => {
     setError(null);
     if (status === 'callback' && !callbackTime) {
-      setError('Callback date/time is required.');
+      setError('Follow-up date/time is required.');
       return;
     }
     onSubmit({
@@ -79,7 +79,7 @@ export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props)
       {status === 'callback' ? (
         <View className="mt-3">
           <DateTimeField
-            label="Callback date/time"
+            label="Follow-up date/time"
             value={callbackTime}
             onChange={setCallbackTime}
             error={error}

@@ -56,7 +56,7 @@ export function LeadCard({ lead, onPress }: Props) {
             />
             <Text className="text-xs text-ink-500 dark:text-ink-400 ml-1.5">
               {lead.next_callback_at
-                ? `Callback: ${formatDate(lead.next_callback_at)}`
+                ? `Follow-up: ${formatDate(lead.next_callback_at)}`
                 : `Last called: ${formatDate(lead.last_called_at)}`}
             </Text>
           </View>

@@ -54,7 +54,7 @@ export function MainNavigator() {
     >
       <Tab.Screen name="Dashboard" component={AgentDashboardScreen} />
       <Tab.Screen name="Leads" component={LeadListScreen} />
-      <Tab.Screen name="Callbacks" component={CallbackListScreen} />
+      <Tab.Screen name="Callbacks" component={CallbackListScreen} options={{ tabBarLabel: 'Follow-ups' }} />
       <Tab.Screen name="History" component={CallHistoryScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

@@ -180,6 +180,34 @@ export function AgentDashboardScreen() {
           </View>
         </View>
 
+        {/* Incoming leads banner */}
+        {stats?.new_leads ? (
+          <Pressable
+            onPress={() => navigation.navigate('Main', { screen: 'Leads' } as never)}
+            className="bg-white dark:bg-ink-800 rounded-2xl p-4 mb-4 border border-ink-200 dark:border-ink-700 flex-row items-center active:opacity-80"
+            style={{ elevation: 1 }}
+          >
+            <View className="w-11 h-11 rounded-2xl bg-emerald-50 items-center justify-center mr-3" style={{ position: 'relative' }}>
+              <Ionicons name="person-add-outline" size={20} color="#10B981" />
+              <View
+                className="absolute -top-1 -right-1 px-1.5 rounded-full items-center justify-center"
+                style={{ minWidth: 18, height: 18, backgroundColor: '#EF4444' }}
+              >
+                <Text className="text-white text-[10px] font-bold">{stats.new_leads}</Text>
+              </View>
+            </View>
+            <View className="flex-1">
+              <Text className="text-ink-900 dark:text-white font-bold text-sm">
+                {stats.new_leads} new {stats.new_leads === 1 ? 'lead' : 'leads'} assigned
+              </Text>
+              <Text className="text-ink-500 dark:text-ink-400 text-xs mt-0.5">
+                Tap to start calling
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+          </Pressable>
+        ) : null}
+
         {/* Primary CTA — slide to get next lead */}
         <SlideToAction
           label={gettingNext ? 'Fetching lead…' : 'Get Next Lead'}
@@ -196,7 +224,7 @@ export function AgentDashboardScreen() {
           <StatCard label="Missed" value={stats?.missed_calls ?? 0} icon="close-circle-outline" tone="danger" />
         </View>
         <View className="flex-row flex-wrap mb-2">
-          <StatCard label="Callbacks" value={stats?.callbacks_due ?? 0} icon="time-outline" tone="warn" />
+          <StatCard label="Follow-ups" value={stats?.callbacks_due ?? 0} icon="time-outline" tone="warn" />
           <StatCard label="Conversions" value={stats?.conversions ?? 0} icon="trophy-outline" tone="violet" />
         </View>
 
@@ -211,7 +239,7 @@ export function AgentDashboardScreen() {
           />
           <QuickActionCard
             icon="time-outline"
-            label="Callbacks"
+            label="Follow-ups"
             tone="warn"
             onPress={() => navigation.navigate('Main', { screen: 'Callbacks' } as never)}
           />

@@ -30,6 +30,7 @@ export const mockStats: AgentStats = {
   missed_calls: 6,
   callbacks_due: 4,
   conversions: 7,
+  new_leads: 5,
 };
 
 export const mockCampaigns: Campaign[] = [
