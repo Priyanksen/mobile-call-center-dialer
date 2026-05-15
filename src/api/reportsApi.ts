@@ -9,7 +9,7 @@ import {
   ReportRange,
   RouteBucket,
 } from '@/types/report';
-import { mockCalls, mockCampaigns, shouldUseMock } from './_mock';
+import { mockCalls, mockCampaigns, mockLeads, shouldUseMock } from './_mock';
 
 function rangeDates(range: ReportRange): { from: Date; to: Date } {
   const now = new Date();
@@ -94,6 +94,23 @@ function buildMockReport(range: ReportRange): FullReport {
     count: Math.round(total * r.w),
   }));
 
+  const sampleNotes = [
+    'Wants to compare 2 plans before committing. Send brochure tomorrow morning.',
+    'Working from office until 6 PM — call after that.',
+    'Already with competitor, contract ends next month. Worth a follow-up.',
+    'Interested but said the price is too high. Discount?',
+    'Asked about family floater plan. Send quotes for 4 members.',
+    'Voicemail left. Caller showed strong interest yesterday.',
+    'DND requested — do not call again.',
+  ];
+  const notes_activity = mockLeads.slice(0, 5).map((l, i) => ({
+    lead_id: l.id,
+    lead_name: l.name,
+    last_note: sampleNotes[i % sampleNotes.length],
+    notes_count: 1 + ((i + 1) % 4),
+    updated_at: new Date(Date.now() - i * 3600_000 * (2 + i)).toISOString(),
+  }));
+
   const by_campaign: CampaignReport[] = mockCampaigns.map((c, i) => {
     const share = i === 0 ? 0.6 : 0.4 / Math.max(1, mockCampaigns.length - 1);
     const t = Math.round(total * share);
@@ -123,6 +140,7 @@ function buildMockReport(range: ReportRange): FullReport {
     by_disposition,
     by_route,
     by_campaign,
+    notes_activity,
   };
 }
 

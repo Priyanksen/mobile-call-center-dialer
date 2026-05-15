@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,7 +8,6 @@ import { AppButton } from '@/components/common/AppButton';
 import { LoadingState } from '@/components/common/LoadingState';
 import { ErrorState } from '@/components/common/ErrorState';
 import { SectionHeader } from '@/components/common/SectionHeader';
-import { BottomSheet } from '@/components/common/BottomSheet';
 import { GradientHeader } from '@/components/common/GradientHeader';
 import { StatusBadge, leadStatusTone, priorityTone, callStatusTone } from '@/components/common/StatusBadge';
 import { RoutePickerSheet } from '@/components/calls/RoutePickerSheet';
@@ -35,9 +34,6 @@ export function LeadDetailScreen() {
   const [error, setError] = useState<string | null>(null);
   const [calling, setCalling] = useState(false);
   const [routeOpen, setRouteOpen] = useState(false);
-  const [noteOpen, setNoteOpen] = useState(false);
-  const [noteText, setNoteText] = useState('');
-  const [savingNote, setSavingNote] = useState(false);
 
   const load = useCallback(async () => {
     setError(null);
@@ -76,31 +72,6 @@ export function LeadDetailScreen() {
     }
   };
 
-  const updateStatus = async (status: Lead['status']) => {
-    if (!lead) return;
-    try {
-      const updated = await leadsApi.update(lead.id, { status });
-      setLead(updated);
-    } catch {
-      Alert.alert('Update failed', 'Could not update lead status.');
-    }
-  };
-
-  const saveNote = async () => {
-    if (!lead || !noteText.trim()) return;
-    setSavingNote(true);
-    const merged = lead.notes ? `${lead.notes}\n\n${noteText.trim()}` : noteText.trim();
-    try {
-      const updated = await leadsApi.update(lead.id, { notes: merged });
-      setLead(updated);
-      setNoteOpen(false);
-      setNoteText('');
-    } catch {
-      Alert.alert('Save failed', 'Could not save the note.');
-    } finally {
-      setSavingNote(false);
-    }
-  };
 
   if (loading) return <LoadingState />;
   if (error || !lead) return <ErrorState message={error ?? 'Lead not found.'} onRetry={load} />;
@@ -152,9 +123,35 @@ export function LeadDetailScreen() {
         </View>
 
         {lead.notes ? (
-          <View className="bg-white dark:bg-ink-800 rounded-2xl p-4 mb-3 border border-ink-200 dark:border-ink-700" style={{ elevation: 1 }}>
-            <SectionHeader title="Notes" />
-            <Text className="text-ink-700 dark:text-ink-200 leading-5">{lead.notes}</Text>
+          <View
+            className="bg-white dark:bg-ink-800 rounded-2xl p-4 mb-3 border border-ink-200 dark:border-ink-700"
+            style={{ elevation: 1 }}
+          >
+            {(() => {
+              const items = lead.notes
+                .split(/\n{2,}/)
+                .map((s) => s.trim())
+                .filter(Boolean);
+              return (
+                <>
+                  <SectionHeader
+                    title="Notes"
+                    subtitle={`${items.length} ${items.length === 1 ? 'note' : 'notes'}`}
+                  />
+                  {items.map((text, i) => (
+                    <View
+                      key={i}
+                      className="flex-row items-start mt-2 bg-amber-50 dark:bg-ink-700 rounded-xl p-3"
+                    >
+                      <View className="w-7 h-7 rounded-lg bg-white dark:bg-ink-800 items-center justify-center mr-3 mt-0.5">
+                        <Ionicons name="document-text-outline" size={14} color="#F59E0B" />
+                      </View>
+                      <Text className="text-ink-800 dark:text-ink-100 leading-5 flex-1">{text}</Text>
+                    </View>
+                  ))}
+                </>
+              );
+            })()}
           </View>
         ) : null}
 
@@ -188,72 +185,9 @@ export function LeadDetailScreen() {
           variant="success"
           icon="call"
         />
-        <View className="h-3" />
-        <View className="flex-row gap-2">
-          <View className="flex-1">
-            <AppButton
-              label="Schedule"
-              variant="secondary"
-              icon="alarm-outline"
-              fullWidth
-              onPress={() => navigation.navigate('ScheduleCallback', { lead })}
-            />
-          </View>
-          <View className="flex-1">
-            <AppButton
-              label="Add Note"
-              variant="ghost"
-              icon="create-outline"
-              fullWidth
-              onPress={() => setNoteOpen(true)}
-            />
-          </View>
-        </View>
-        <View className="h-3" />
-        <View className="flex-row gap-2">
-          <View className="flex-1">
-            <AppButton
-              label="Interested"
-              variant="ghost"
-              icon="checkmark-circle-outline"
-              fullWidth
-              onPress={() => updateStatus('interested')}
-            />
-          </View>
-          <View className="flex-1">
-            <AppButton
-              label="Not Interested"
-              variant="ghost"
-              icon="close-circle-outline"
-              fullWidth
-              onPress={() => updateStatus('not_interested')}
-            />
-          </View>
-        </View>
       </ScrollView>
 
       <RoutePickerSheet visible={routeOpen} onClose={() => setRouteOpen(false)} onPick={startCall} />
-
-      <BottomSheet visible={noteOpen} onClose={() => setNoteOpen(false)} title="Add note">
-        <TextInput
-          value={noteText}
-          onChangeText={setNoteText}
-          multiline
-          autoFocus
-          placeholder="Type your note about this lead…"
-          placeholderTextColor="#94A3B8"
-          className="bg-ink-50 dark:bg-ink-700 rounded-xl px-3 py-3 text-ink-900 dark:text-white text-base mb-3"
-          style={{ minHeight: 120, textAlignVertical: 'top' }}
-        />
-        <AppButton
-          label="Save note"
-          onPress={saveNote}
-          loading={savingNote}
-          fullWidth
-          icon="save-outline"
-          disabled={!noteText.trim()}
-        />
-      </BottomSheet>
     </View>
   );
 }

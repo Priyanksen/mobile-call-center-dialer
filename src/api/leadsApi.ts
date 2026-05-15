@@ -84,8 +84,53 @@ export const leadsApi = {
     }
   },
 
+  async create(payload: Omit<Lead, 'id'>): Promise<Lead> {
+    try {
+      const { data } = await axiosClient.post<Lead>(endpoints.leads.list, payload);
+      if (data && !mockLeads.find((l) => l.id === data.id)) mockLeads.unshift(data);
+      return data;
+    } catch (e) {
+      const err = e as { response?: { status?: number } };
+      const isNetworkError = !err.response;
+      if (isNetworkError) {
+        const nextId = Math.max(0, ...mockLeads.map((l) => l.id)) + 1;
+        const created: Lead = { id: nextId, ...payload };
+        mockLeads.unshift(created);
+        return created;
+      }
+      throw e;
+    }
+  },
+
+  async bulkCreate(payloads: Omit<Lead, 'id'>[]): Promise<Lead[]> {
+    const created: Lead[] = [];
+    for (const p of payloads) {
+      try {
+        const c = await this.create(p);
+        created.push(c);
+      } catch {
+        // skip failed rows
+      }
+    }
+    return created;
+  },
+
   async update(id: number, patch: Partial<Lead>): Promise<Lead> {
-    const { data } = await axiosClient.patch<Lead>(endpoints.leads.detail(id), patch);
-    return data;
+    try {
+      const { data } = await axiosClient.patch<Lead>(endpoints.leads.detail(id), patch);
+      return data;
+    } catch (e) {
+      const err = e as { response?: { status?: number } };
+      const isNetworkError = !err.response;
+      if (isNetworkError) {
+        // In mock mode, mutate the in-memory mockLeads so the change persists across screens
+        const idx = mockLeads.findIndex((l) => l.id === id);
+        if (idx >= 0) {
+          mockLeads[idx] = { ...mockLeads[idx], ...patch } as Lead;
+          return mockLeads[idx];
+        }
+      }
+      throw e;
+    }
   },
 };

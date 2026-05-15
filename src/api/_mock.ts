@@ -73,6 +73,8 @@ export const mockLeads: Lead[] = [
     last_called_at: null,
     next_callback_at: null,
     city: 'Delhi',
+    notes:
+      'Brand new lead — never been contacted before.\n\nLikely interested in family floater plan; he mentioned a wife and two kids in the form. Best to call between 6–8 PM (working hours: 10–6).',
   },
   {
     id: 102,
@@ -86,6 +88,8 @@ export const mockLeads: Lead[] = [
     last_called_at: '2026-05-10T08:30:00Z',
     next_callback_at: '2026-05-12T10:00:00Z',
     city: 'Mumbai',
+    notes:
+      'Wants quotes for family floater plan covering 4 members.\n\nObjection: price seems high compared to competitor X. Offer 10% renewal discount if available.\n\nReschedule for Tuesday 10am — she confirmed she can take the call then.',
   },
   {
     id: 103,
@@ -98,6 +102,8 @@ export const mockLeads: Lead[] = [
     last_called_at: '2026-05-09T11:00:00Z',
     next_callback_at: null,
     city: 'Lucknow',
+    notes:
+      'Send brochure first before next call — he wants to review terms in writing.\n\nCurrently has a loan with HDFC, EMI ending in September. Strong candidate for refinancing.',
   },
 ];
 

@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/navigation/types';
 import { GradientHeader } from '@/components/common/GradientHeader';
 import { LoadingState } from '@/components/common/LoadingState';
 import { ErrorState } from '@/components/common/ErrorState';
@@ -135,6 +138,7 @@ export function ReportsScreen() {
           <DispositionCard data={data} />
           <RouteCard data={data} />
           <CampaignLeaderboard data={data} />
+          <NotesActivityCard data={data} />
         </ScrollView>
       )}
 
@@ -467,6 +471,84 @@ function CampaignLeaderboard({ data }: { data: FullReport }) {
           </View>
         );
       })}
+    </View>
+  );
+}
+
+function NotesActivityCard({ data }: { data: FullReport }) {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const notes = data.notes_activity ?? [];
+  if (!notes.length) return null;
+  const fmt = (iso: string) => {
+    const d = new Date(iso);
+    const diffMs = Date.now() - d.getTime();
+    const h = Math.floor(diffMs / 3_600_000);
+    if (h < 1) return 'just now';
+    if (h < 24) return `${h}h ago`;
+    const days = Math.floor(h / 24);
+    return `${days}d ago`;
+  };
+  return (
+    <View
+      className="bg-white dark:bg-ink-800 rounded-2xl p-4 mb-2 border border-ink-200 dark:border-ink-700"
+      style={{ elevation: 1 }}
+    >
+      <View className="flex-row items-center justify-between mb-3">
+        <View>
+          <Text className="text-ink-900 dark:text-white text-base font-bold">Notes activity</Text>
+          <Text className="text-ink-500 dark:text-ink-400 text-xs mt-0.5">
+            Tap a lead to open its full notes
+          </Text>
+        </View>
+        <View className="px-2 py-0.5 rounded-full bg-amber-50 flex-row items-center">
+          <Ionicons name="create-outline" size={12} color="#F59E0B" />
+          <Text className="text-amber-700 text-[10px] font-bold ml-1">
+            {notes.reduce((a, n) => a + n.notes_count, 0)} notes
+          </Text>
+        </View>
+      </View>
+      <ScrollView
+        style={{ maxHeight: 280 }}
+        nestedScrollEnabled
+        showsVerticalScrollIndicator
+        contentContainerStyle={{ paddingRight: 4 }}
+      >
+        {notes.map((n, i) => (
+          <Pressable
+            key={n.lead_id}
+            onPress={() => navigation.navigate('LeadDetail', { leadId: n.lead_id })}
+            className={`flex-row items-start py-2.5 active:opacity-70 ${
+              i < notes.length - 1 ? 'border-b border-ink-100 dark:border-ink-700' : ''
+            }`}
+          >
+            <View className="w-8 h-8 rounded-lg bg-amber-50 items-center justify-center mr-3 mt-0.5">
+              <Ionicons name="document-text-outline" size={14} color="#F59E0B" />
+            </View>
+            <View className="flex-1 pr-2">
+              <View className="flex-row items-center justify-between mb-0.5">
+                <Text
+                  className="text-ink-900 dark:text-white text-sm font-semibold flex-1"
+                  numberOfLines={1}
+                >
+                  {n.lead_name}
+                </Text>
+                <Text className="text-ink-400 dark:text-ink-500 text-[10px] ml-2">
+                  {fmt(n.updated_at)}
+                </Text>
+              </View>
+              <Text className="text-ink-700 dark:text-ink-200 text-xs leading-4" numberOfLines={2}>
+                {n.last_note}
+              </Text>
+              {n.notes_count > 1 ? (
+                <Text className="text-ink-400 dark:text-ink-500 text-[10px] mt-1 font-semibold">
+                  +{n.notes_count - 1} more
+                </Text>
+              ) : null}
+            </View>
+            <Ionicons name="chevron-forward" size={14} color="#94A3B8" style={{ marginTop: 4 }} />
+          </Pressable>
+        ))}
+      </ScrollView>
     </View>
   );
 }

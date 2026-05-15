@@ -45,10 +45,19 @@ export interface CampaignReport {
   conversion_rate: number; // 0..100
 }
 
+export interface NoteActivity {
+  lead_id: number;
+  lead_name: string;
+  last_note: string;
+  notes_count: number;
+  updated_at: string; // ISO
+}
+
 export interface FullReport {
   summary: ReportSummary;
   by_day: DayBucket[];
   by_disposition: DispositionBucket[];
   by_route: RouteBucket[];
   by_campaign: CampaignReport[];
+  notes_activity: NoteActivity[];
 }

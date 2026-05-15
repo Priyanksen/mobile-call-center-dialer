@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AppButton } from '@/components/common/AppButton';
 import { DateTimeField } from '@/components/common/DateTimeField';
@@ -34,7 +34,6 @@ const OPTIONS: OptDef[] = [
 
 export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props) {
   const [status, setStatus] = useState<DispositionStatus>('interested');
-  const [notes, setNotes] = useState('');
   const [callbackTime, setCallbackTime] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +47,7 @@ export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props)
       call_id: callId,
       lead_id: leadId,
       status,
-      notes: notes.trim(),
+      notes: '',
       callback_time: callbackTime ? callbackTime.toISOString() : null,
     });
   };
@@ -77,7 +76,7 @@ export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props)
       </View>
 
       {status === 'callback' ? (
-        <View className="mt-3">
+        <View className="mt-3 mb-2">
           <DateTimeField
             label="Follow-up date/time"
             value={callbackTime}
@@ -89,22 +88,8 @@ export function DispositionForm({ callId, leadId, submitting, onSubmit }: Props)
       ) : null}
 
       <View className="mt-2">
-        <View className="flex-row items-center mb-2">
-          <Ionicons name="document-text-outline" size={16} color="#64748B" />
-          <Text className="text-ink-700 dark:text-ink-200 ml-2 font-semibold">Notes</Text>
-        </View>
-        <TextInput
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-          placeholder="Add a note about this call…"
-          placeholderTextColor="#94A3B8"
-          className="bg-ink-50 dark:bg-ink-700 rounded-xl px-3 py-3 text-ink-900 dark:text-white text-base mb-4"
-          style={{ minHeight: 100, textAlignVertical: 'top' }}
-        />
+        <AppButton label="Submit Disposition" onPress={submit} loading={submitting} fullWidth size="lg" icon="checkmark-done-outline" />
       </View>
-
-      <AppButton label="Submit Disposition" onPress={submit} loading={submitting} fullWidth size="lg" icon="checkmark-done-outline" />
     </View>
   );
 }
